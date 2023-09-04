@@ -1,1 +1,1 @@
-# LinearClassifier.github.io
+In this task, we will work with data on patients, some of whom have heart disease. We need to build a model that classifies patients into patients with this disease and those who do not have it, and also analyze the results
