@@ -53,13 +53,10 @@ print(d)
 
 np.sqrt(np.sum(np.square(clf.coef_)))
 
-"""3. Какое значение L2-нормы вектора весов (без учета свободного коэффициента) у полученного линейного классификатора? Ответ округлите до двух знаков после запятой.
+"""
+Now let's find the value of the L2-norm of the vector of weights
+(without taking into account the free coefficient) of the resulting linear classifier
 
-_Напоминание. L2-норма вектора $v = (v_1, \ldots, v_n)$ - это корень из суммы квадратов его элементов:_
-
-$$
-\|v\|_2 = \sqrt{\sum\limits_{i=1}^nv_i^2}
-$$
 """
 
 def L2_norma(x):
@@ -67,17 +64,19 @@ def L2_norma(x):
 L2 = L2_norma(clf.coef_)
 print(L2)
 
-"""4. Найдите долю правильных ответов классификатора на тестовой части выборки **(в процентах)**. Ответ округлите до двух знаков после запятой. Например, если значение доли правильных ответов будет равно 0.1234, то ответом будет 12.34 - ведь это 12.34%."""
+"""
+Let's find accuracy score
+"""
 
 from sklearn.metrics import accuracy_score
 
 accuracy_score(y_test, y_pred)
 
-"""5. В задаче классификации, как и в задаче регрессии, для оптимизации линейных моделей можно применять регуляризацию. Этот метод реализован и в `sklearn.linear_model.SGDClassifier` - параметр регуляризации обозначается параметром `alpha`. За тип регуляризации (L1, L2 или обе сразу) отвечает параметр `penalty`.
-
-   Обучите классификатор заново с параметром регуляризации `alpha=0.1` и типом регуляризации `penalty='l1'`. Оставьте максимальное число итераций, равное `max_iter=1000` и сид `random_state=13`. Также вместо постоянного значения шага градиентного спуска используйте оптимальное (`learning_rate='optimal'`), которое, кстати, зависит от `alpha` (о том, как именно он вычисляется и какие еще параметры можно выбрать, можно подробнее прочитать в [документации](https://scikit-learn.org/stable/modules/generated/sklearn.linear_model.SGDClassifier.html)). В данном случае значение начального шага градиентного спуска `eta0` никак не участвует в обучении.
-   
-   Отличается ли качество полученного классификатора от качества первого? Какая доля правильных ответов получается теперь на тестовой выборке? Выразите ее **в процентах**, ответ округлите до двух знаков после запятой. Например, если значение доли правильных ответов будет равно 0.1234, то ответом будет 12.34 - ведь это 12.34%.
+"""
+Let's train the classifier anew with the regularization parameter `alpha=0.1` and the regularization type `penalty='l1'.
+Also, instead of a constant value of the gradient descent step, we will use the optimal one (`learning_rate='optimal').
+In this case, the value of the initial step of gradient descent `eta0` does not participate in training in any way.
+We do this to find out if the quality of the resulting classifier differs from the quality of the first one.
 """
 
 clf_lin = SGDClassifier(loss='log', penalty='l1', alpha=0.1, max_iter=1000, random_state=13, learning_rate='optimal')
@@ -85,17 +84,17 @@ clf_lin.fit(X_train, y_train)
 y_pred_l = clf_lin.predict(X_test)
 accuracy_score(y_test, y_pred_l)
 
-"""6. Найдите L2-норму вектора весов для полученного классификатора (заметьте, как на нее повлияла регуляризация). Ответ округлите до двух знаков после запятой.
-
-    Заметьте, что вектор стал более разреженным, и в нем появились нулевые элементы - это результат действия L1-регуляризации.
+"""
+Let's find the L2 norm of the weight vector for the resulting classifier.
+We will see that the vector has become more sparse, and zero elements have appeared in it.
 """
 
 L2_l = L2_norma(clf_lin.coef_)
 print(L2_l)
 
-"""7. Наконец, проверьте, как полученные классификаторы предсказывают не классы, а вероятности классов - так как мы работаем с логистической регрессией, это можно сделать. Посмотрите на вероятности, которые выдает первый классификатор (обученный с постоянным шагом градиентного спуска и без регуляризации) на тестовой части выборки. В этом вам поможет метод `predict_proba`. Результатом его работы будет список размера $N\times 2$, где $N$ - это число объектов. В каждом столбце списка находятся вероятности соответствующего класса для объектов. Поэтому если вам нужен положительный класс, вас интересует последний столбец.
-
-    Какое получается значение AUC-ROC? Ответ округлите до двух знаков после запятой.
+""" 
+Let's check how the resulting classifiers predict not classes, but the probabilities of classes,
+and calculate the AUC-ROC value
 """
 
 from sklearn.linear_model import LogisticRegression
@@ -109,9 +108,8 @@ y_pred_proba_d
 from sklearn.metrics import roc_auc_score
 roc_auc_score(y_test, y_pred_proba_d)
 
-"""8. Посмотрите на вероятности, которые выдает второй классификатор (обученный с оптимальным шагом градиентного спуска и с регуляризацией) на тестовой части выборки. Что вы наблюдаете - как отличаются эти вероятности от вероятностей первого классификатора?
-
-   Посчитайте значение AUC-ROC второго классификатора. Ответ округлите до двух знаков после запятой.
+"""
+Calculate AUC_ROC value for two classificator
 """
 
 y_pred_proba_l1 = clf_lin.predict_proba(X_test)
@@ -122,7 +120,9 @@ y_pred_proba_d2
 
 roc_auc_score(y_test, y_pred_proba_d2)
 
-"""9. Какой признак является самым важным по мнению лучшей модели (имеет наибольший по модулю коэффициент) для принятия решения?"""
+"""
+Finally, let's find out which feature is the most important in the opinion of the best model (has the largest coefficient modulo).
+"""
 
 from sklearn.metrics import confusion_matrix
 confusion_matrix(y_test, y_pred_l)
