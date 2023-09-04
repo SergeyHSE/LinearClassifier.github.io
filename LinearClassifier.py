@@ -40,7 +40,7 @@ We need to find the value of the free coefficient of the resulting linear classi
 
 from sklearn.linear_model import SGDClassifier
 
-clf = SGDClassifier(loss='log',  alpha=0,  max_iter=1000, learning_rate='constant',
+clf = SGDClassifier(loss='log_loss',  alpha=0,  max_iter=1000, learning_rate='constant',
                     eta0=0.1, random_state=13)
 clf.fit(X_train, y_train)
 y_pred = clf.predict(X_test)
