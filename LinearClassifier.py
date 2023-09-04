@@ -9,6 +9,47 @@ import pandas as pd
 data = pd.read_csv('https://docs.google.com/uc?export=download&id=1VPkoWfiIvZl4HGp49BUaVEEblVIGYh91')
 data.head()
 
+# build correlation matrix
+
+plt.figure(figsize=(12, 10), dpi=100)
+correlation_matrix = data.corr()
+sns.heatmap(correlation_matrix, annot=True, cmap='coolwarm')
+plt.show()
+   
+# Build regplots
+
+data.columns
+feature_names = list(data.drop('target', axis=1).columns)
+feature_names
+len(feature_names)
+
+num_rows = 7
+num_cols = 2
+num_plots = len(feature_names)
+fig, axes = plt.subplots(nrows=num_rows, ncols=num_cols, figsize=(10, 20))
+axes = axes.flatten()
+for i in range(num_plots):
+    if i < num_plots:
+        sns.regplot(x=feature_names[i], y='target', data=data, ax=axes[i])
+        axes[i].set_title(f'Regression Plot for {feature_names[i]}')
+    else:
+        fig.delaxes(axes[i])
+plt.tight_layout()
+plt.show()
+
+# Build boxplots
+
+fig, axes = plt.subplots(nrows=num_rows, ncols=num_cols, figsize=(20, 20))
+axes = axes.flatten()
+for i in range(num_plots):
+    if i < num_plots:
+        sns.boxplot(x=feature_names[i], y='target', data=data, ax=axes[i])
+        axes[i].set_title(f'Regression Plot for {feature_names[i]}')
+    else:
+        fig.delaxes(axes[i])
+plt.tight_layout()
+plt.show()
+
 """
 What percentage of the patients presented in the data have heart disease (`target' = 1`)?
 """
