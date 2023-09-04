@@ -1,7 +1,5 @@
 # -*-         coding: utf-8 -*-
-"""
-Original file is located at 'https://colab.research.google.com/drive/11IltBc0sFWhQ5dLnv5QMFwDsZ8mpOum_'
-"""
+
 
 import numpy as np
 import pandas as pd
