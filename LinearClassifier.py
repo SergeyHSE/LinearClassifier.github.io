@@ -231,8 +231,23 @@ y_pred_proba
 y_pred_proba_d = np.delete(y_pred_proba, 0, 1)
 y_pred_proba_d
 
-from sklearn.metrics import roc_auc_score
-roc_auc_score(y_test, y_pred_proba_d)
+from sklearn.metrics import roc_curve, roc_auc_score
+
+fpr, tpr, thresholds = roc_curve(y_test, y_pred_proba_d)
+
+roc_auc = roc_auc_score(y_test, y_pred_proba_d)
+
+# Plot ROC curve
+plt.figure(figsize=(8, 6), dpi=100)
+plt.plot(fpr, tpr, label=f'ROC Curve (AUC = {roc_auc:.2f})')
+plt.plot([0, 1], [0, 1], 'k--', color='red', label='Random')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate (FPR)')
+plt.ylabel('True Positive Rate (TPR)')
+plt.title('Receiver Operating Characteristic (ROC) Curve')
+plt.legend(loc="lower right")
+plt.show()
 
 """
 Calculate AUC_ROC value for two classificator
@@ -244,7 +259,20 @@ y_pred_proba_l1
 y_pred_proba_d2 = np.delete(y_pred_proba_l1, 0, 1)
 y_pred_proba_d2
 
-roc_auc_score(y_test, y_pred_proba_d2)
+roc_auc2 = roc_auc_score(y_test, y_pred_proba_d2)
+fpr2, tpr2, thresholds2 = roc_curve(y_test, y_pred_proba_d2)
+
+# Plot ROC curve for second classifier
+plt.figure(figsize=(8, 6), dpi=100)
+plt.plot(fpr2, tpr2, label=f'ROC Curve (AUC = {roc_auc2:.2f})')
+plt.plot([0, 1], [0, 1], 'k--', color='red', label='Random')
+plt.xlim([0.0, 1.0])
+plt.ylim([0.0, 1.05])
+plt.xlabel('False Positive Rate (FPR)')
+plt.ylabel('True Positive Rate (TPR)')
+plt.title('Receiver Operating Characteristic (ROC) Curve for second Classifier')
+plt.legend(loc="lower right")
+plt.show()
 
 """
 Finally, let's find out which feature is the most important in the opinion of the best model (has the largest coefficient modulo).
@@ -260,3 +288,22 @@ T = T.T
 T
 
 np.concatenate((D, T), axis=1)
+
+# Build figure
+
+coefficients_df = pd.concat([D, T], axis=1)
+coefficients_df.columns = ['Feature', 'Coefficient']
+coefficients_df
+
+# Sort the DataFrame by coefficient magnitude (absolute value) for better visualization
+coefficients_df['Coefficient_ABS'] = np.abs(coefficients_df['Coefficient'])
+coefficients_df = coefficients_df.sort_values(by='Coefficient_ABS', ascending=False)
+
+# Create a bar plot to visualize coefficients
+plt.figure(figsize=(10, 6), dpi=100)
+plt.barh(coefficients_df['Feature'], coefficients_df['Coefficient'], color='blue')
+plt.xlabel('Coefficient Value')
+plt.ylabel('Feature')
+plt.title('Logistic Regression Coefficients')
+plt.grid(axis='x', linestyle='--', alpha=0.6)
+plt.show()
