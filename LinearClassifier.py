@@ -97,6 +97,17 @@ f = 138
 h = (d / (d + f)) * 100
 print(h)
 
+# Build countplot in percent
+    
+plt.figure(figsize=(7, 6), dpi=100)
+total = float(len(data))
+ax = sns.countplot(x='target', data=data)
+for p in ax.patches:
+    height = p.get_height()
+    ax.annotate(f'{(height/total)*100:.2f}%', (p.get_x() + p.get_width() / 2., height),
+                ha='center', va='bottom', fontsize=14, color='black')
+plt.show()
+
 # Let's split the data
 
 from sklearn.model_selection import train_test_split
@@ -149,6 +160,16 @@ Let's find accuracy score
 from sklearn.metrics import accuracy_score
 
 accuracy_score(y_test, y_pred)
+
+# Build accuracy score
+
+plt.figure(figsize=(6, 6), dpi=100)
+plt.bar(['Accuracy'], [accuracy], color='orange')
+plt.ylabel('Accuracy')
+plt.title('Accuracy Score')
+plt.ylim(0, 1)
+plt.text(0, accuracy, f'{accuracy:.2f}', ha='center', va='bottom', fontsize=16, color='black')
+plt.show()
 
 """
 Let's train the classifier anew with the regularization parameter `alpha=0.1` and the regularization type `penalty='l1'.
