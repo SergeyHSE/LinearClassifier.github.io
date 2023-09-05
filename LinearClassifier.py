@@ -159,7 +159,8 @@ Let's find accuracy score
 
 from sklearn.metrics import accuracy_score
 
-accuracy_score(y_test, y_pred)
+accuracy = accuracy_score(y_test, y_pred)
+accuracy
 
 # Build accuracy score
 
@@ -181,7 +182,33 @@ We do this to find out if the quality of the resulting classifier differs from t
 clf_lin = SGDClassifier(loss='log', penalty='l1', alpha=0.1, max_iter=1000, random_state=13, learning_rate='optimal')
 clf_lin.fit(X_train, y_train)
 y_pred_l = clf_lin.predict(X_test)
-accuracy_score(y_test, y_pred_l)
+accuracy_l = accuracy_score(y_test, y_pred_l)
+
+plt.figure(figsize=(6, 6), dpi=100)
+plt.bar(['Accuracy'], [accuracy_l], color='brown')
+plt.ylabel('Accuracy')
+plt.title('Accuracy Score with regularizator')
+plt.ylim(0, 1)
+plt.text(0, accuracy_l, f'{accuracy:.2f}', ha='center', va='bottom', fontsize=16, color='black') 
+plt.show()
+
+# Compare two accuracy
+
+plt.figure(figsize=(12, 6), dpi=100)
+plt.subplot(1, 2, 1)
+plt.bar(['Accuracy'], [accuracy], color='orange')
+plt.ylabel('Accuracy')
+plt.title('Accuracy Score')
+plt.ylim(0, 1)
+plt.text(0, accuracy, f'{accuracy:.2f}', ha='center', va='bottom', fontsize=16, color='black')
+plt.subplot(1, 2, 2)
+plt.bar(['Accuracy'], [accuracy_l], color='brown')
+plt.ylabel('Accuracy')
+plt.title('Accuracy Score with regularizator')
+plt.ylim(0, 1)
+plt.text(0, accuracy_l, f'{accuracy_l:.2f}', ha='center', va='bottom', fontsize=16, color='black')
+plt.tight_layout()
+plt.show()
 
 """
 Let's find the L2 norm of the weight vector for the resulting classifier.
