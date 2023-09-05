@@ -65,6 +65,28 @@ for i in range(num_plots):
 plt.tight_layout()
 plt.show()
 
+# Build bar plots
+
+fig, axes = plt.subplots(nrows=num_rows, ncols=num_cols, figsize=(20, 18))
+axes = axes.flatten()
+for i, feature in enumerate(feature_names):
+    if i < len(feature_names):
+        sns.countplot(x=feature, hue='target', data=data, ax=axes[i])
+        axes[i].set_title(f'Count Plot for {feature}')
+plt.tight_layout()
+plt.show()
+
+# Build violinplots
+
+fig, axes = plt.subplots(nrows=num_rows, ncols=num_cols, figsize=(16, 16))
+axes = axes.flatten()
+for i, feature in enumerate(feature_names):
+    if i < len(feature_names):
+        sns.violinplot(x='target', y=feature, data=data, ax=axes[i])
+        axes[i].set_title(f'Violin Plot for {feature}')
+plt.tight_layout()
+plt.show()
+
 """
 What percentage of the patients presented in the data have heart disease (`target' = 1`)?
 """
